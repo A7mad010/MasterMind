@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MasterMind.Interface
 {
-    internal interface IExecutable
+    internal interface IWritable
     {
+        void Write(string input);
     }
 }

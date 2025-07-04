@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 namespace MasterMind.GameCore
 {
@@ -16,6 +14,23 @@ namespace MasterMind.GameCore
         public string playerName { get; set; }
         public string password { get; private set; }
         public int attempts {  get; private set; }
+
+        private static GameSettings m_instance;
+        private InputValidator inputValidator = InputValidator.Instance;
+
+        //Singleton Class
+        public static GameSettings Instance
+        {
+            get
+            {
+                if(m_instance == null)
+                {
+                    m_instance = new GameSettings();
+                }
+
+                return m_instance;
+            }
+        }
 
         /// <summary>
         /// Updates the player name by:
@@ -39,8 +54,34 @@ namespace MasterMind.GameCore
         /// <param name="newPassword"></param>
         public void ChangePassword(string newPassword)
         {
-            //Filtering :
             newPassword = newPassword.Trim();
+
+            if(inputValidator.IsNumericOnly(newPassword) && inputValidator.IsCorrectLenght(newPassword,4) && inputValidator.HasUniqueDigits(newPassword))
+            {
+                password = newPassword;
+            }
+            else
+            {
+                return;
+            }
+        }
+        /// <summary>
+        /// Use to generate pssword (Random)
+        /// </summary>
+        public void RandomPassword()
+        {
+            Random random = new Random();
+            string newPassword = "";
+
+            while (newPassword.Length < 4)
+            {
+                char digit = random.Next(0, 10).ToString()[0];
+
+                if (!newPassword.Contains(digit))
+                {
+                    newPassword += digit;
+                }
+            }
 
             password = newPassword;
         }
@@ -49,14 +90,25 @@ namespace MasterMind.GameCore
         /// - Setting it to the new value provided
         /// - Ensuring the value is never less than 1 (minimum is 1)
         /// <param name="newAttempts"></param>
-        public void ChangeAttempts(int newAttempts)
+        public void ChangeAttempts(string newAttempts)
         {
-            if(newAttempts < 1)
+            int intAttempts = 0;
+
+            if (inputValidator.IsNumericOnly(newAttempts))
             {
-                newAttempts = 1;
+                intAttempts = Convert.ToInt16(newAttempts);
+            }
+            else
+            {
+                return;
             }
 
-            attempts = newAttempts;
+            if (intAttempts < 1)
+            {
+                intAttempts = 1;
+            }
+
+            attempts = intAttempts;
         }
     }
 }
