@@ -65,6 +65,7 @@ namespace MasterMind.GameCore
                 return;
             }
         }
+
         /// <summary>
         /// Use to generate pssword (Random)
         /// </summary>

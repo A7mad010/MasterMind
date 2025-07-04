@@ -9,11 +9,7 @@ namespace MasterMind
 
         static void Main(string[] args)
         {
-            GameSettings.Instance.RandomPassword();
-            Console.WriteLine(GameSettings.Instance.password );
 
-            Console.WriteLine("--------------------");
-            IsInputCommand(Console.ReadLine());
         }
 
         static void IsInputCommand(string input)

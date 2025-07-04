@@ -47,6 +47,7 @@
     <Compile Include="GameCore\GameManager.cs" />
     <Compile Include="GameCore\GameSettings.cs" />
     <Compile Include="GameCore\InputValidator.cs" />
+    <Compile Include="GameCore\MassagePro.cs" />
     <Compile Include="Interface\IWritable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
