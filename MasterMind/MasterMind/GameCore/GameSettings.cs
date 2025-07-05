@@ -11,9 +11,9 @@ namespace MasterMind.GameCore
     /// </summary>
     internal class GameSettings
     {
-        public string playerName { get; set; }
-        public string password { get; private set; }
-        public int attempts {  get; private set; }
+        public string playerName { get; set; } = "Player";
+        public string passwordCode { get; private set; } = "";
+        public int attempts { get; private set; } = 8;
 
         private static GameSettings m_instance;
         private InputValidator inputValidator = InputValidator.Instance;
@@ -58,7 +58,7 @@ namespace MasterMind.GameCore
 
             if(inputValidator.IsNumericOnly(newPassword) && inputValidator.IsCorrectLenght(newPassword,4) && inputValidator.HasUniqueDigits(newPassword))
             {
-                password = newPassword;
+                passwordCode = newPassword;
             }
             else
             {
@@ -84,7 +84,7 @@ namespace MasterMind.GameCore
                 }
             }
 
-            password = newPassword;
+            passwordCode = newPassword;
         }
 
         /// Updates the number of attempts by:
