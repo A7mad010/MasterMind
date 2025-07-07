@@ -11,47 +11,27 @@ namespace MasterMind.GameCore
     /// </summary>
     internal class GameCommands : IWritable
     {
-        private static GameCommands m_instance;
-
-        /// <summary>
-        /// Singelton 
-        /// </summary>
-        public static GameCommands Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new GameCommands();
-                }
-
-                return m_instance;
-            }
-        }
-
         public void Write(string input)
         {
             string[] parts = SplitCommand(input);
 
-            if (parts.Length < 2)
-            {
-                MassagePro.TextPro("You need to enter value",ConsoleColor.Red,10);
-                return;
-            }
-
             switch (parts[0])
             {
-                case "-p": GameSettings.Instance.ChangePassword(parts[1]);
+                case "-password": GameSettings.Instance.ChangePassword(parts[1]);
                     break;
-                case "-t": GameSettings.Instance.ChangeAttempts(parts[1]);
+                case "-attempt": GameSettings.Instance.ChangeAttempts(parts[1]);
                     break;
-                case "-n":GameSettings.Instance.ChangePlayerName(input);
+                case "-start": GameManager.Instance.HandleGameStart();
                     break;
-                case "-rp":GameSettings.Instance.RandomPassword();
+                case "-restart": GameManager.Instance.ReStartGame();
                     break;
-                case "-r":GameSettings.Instance.ResetGam();
+                case "-random": GameSettings.Instance.RandomPassword();
                     break;
-                default: MassagePro.TextPro($"Wornig Command : \n{CommandsHelp()}",ConsoleColor.Red,5);
+                case "-exit": Environment.Exit(0);
+                    break;
+                case "-help": MassagePro.Text($"All commands in the game : \n{CommandsHelp()}",ConsoleColor.Yellow,5);
+                    break;
+                default: MassagePro.Text($"Worng Command : \n{CommandsHelp()}",ConsoleColor.Red,5);
                     break;
             }
         }
@@ -75,9 +55,13 @@ namespace MasterMind.GameCore
         {
             string massage = "";
 
-            massage += "-t : to update attempts number \n";
-            massage += "-p : to update password code \n";
-            massage += "-n : to update player`s name \n";
+            massage += "-start : to start game \n";
+            massage += "-restart : to reStart game \n";
+            massage += "-attempt : to update attempts number \n";
+            massage += "-password : to update password code \n";
+            massage += "-random : To set a random password \n";
+            massage += "-exit : to exit game \n";
+            massage += "-help : to show all the commands \n";
 
             return massage;
         }

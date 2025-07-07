@@ -8,7 +8,11 @@ namespace MasterMind.GameCore
     /// </summary>
     internal static class MassagePro
     {
-        public static void TextPro(string text = "", ConsoleColor color = ConsoleColor.White, int threadSleep = 0)
+
+        /// <summary>
+        /// You can easily control the text formatting.
+        /// </summary>
+        public static void Text(string text = "", ConsoleColor color = ConsoleColor.White, int threadSleep = 0)
         {
             Console.ForegroundColor = color;
             

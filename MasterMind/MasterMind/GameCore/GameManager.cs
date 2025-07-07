@@ -16,9 +16,7 @@ namespace MasterMind.GameCore
 
         private static GameManager m_instance;
 
-        /// <summary>
-        /// Singelton 
-        /// </summary>
+        //singelton
         public static GameManager Instance
         {
             get
@@ -40,30 +38,29 @@ namespace MasterMind.GameCore
         {
             if (m_isGameOver)
             {
-                MassagePro.TextPro("Game over. Start a new game or reset the password.", ConsoleColor.Red, 10);
-                return;
-            }
-
-            if (!m_isGameStarted)
-            {
-                HandleGameStart(input);
+                MassagePro.Text("Game over. Start a new game to play again", ConsoleColor.Red, 10);
                 return;
             }
 
             if (!IsValidGuess(input))
             {
-                MassagePro.TextPro("Invalid input. Please enter a 4-digit number.", ConsoleColor.Red, 5);
                 return;
             }
 
             ProcessGuess(input);
         }
 
+        /// <summary>
+        /// Reset game settings
+        /// </summary>
         public void ReStartGame()
         {
+            GameSettings.Instance.ChangePassword("");
             m_isGameOver = false;
             m_isGameStarted = false;
-            m_round = 0;
+            m_round = 1;
+
+            MassagePro.Text("The game has been restarted, you can start the game again by typing the command (-start)", ConsoleColor.Yellow, 5);
         }
 
         /// <summary>
@@ -72,22 +69,21 @@ namespace MasterMind.GameCore
         /// otherwise prompts the user to confirm if they are ready.
         /// </summary>
         /// <param name="input"></param>
-        private void HandleGameStart(string input)
+        public void HandleGameStart()
         {
-            if (input.Trim().ToLower() == "yes")
+            if (m_isGameStarted == false)
             {
-                if(GameSettings.Instance.passwordCode == "")
+                if(GameSettings.Instance.password == "")
                 {
                     GameSettings.Instance.RandomPassword();
                 }
 
                 m_isGameStarted = true;
-                m_round = 1;
-                MassagePro.TextPro("Game started! Try to guess the password.", ConsoleColor.Green, 5);
+                MassagePro.Text("Game started! Try to guess the password.", ConsoleColor.Green, 5);
             }
             else
             {
-                MassagePro.TextPro("Are you ready to start? [yes/no]", ConsoleColor.Yellow, 5);
+                MassagePro.Text("The game is currently being played.", ConsoleColor.Green, 5);
             }
         }
 
@@ -98,7 +94,9 @@ namespace MasterMind.GameCore
         /// <returns></returns>
         private bool IsValidGuess(string input)
         {
-            return InputValidator.Instance.IsNumericOnly(input) && InputValidator.Instance.IsCorrectLenght(input,GameSettings.Instance.passwordCode.Length);
+            return InputValidator.Instance.IsNumericOnly(input)
+                && InputValidator.Instance.IsCorrectLenght(input, GameSettings.Instance.password.Length)
+                && InputValidator.Instance.HasUniqueDigits(input);
         }
 
         /// <summary>
@@ -107,18 +105,18 @@ namespace MasterMind.GameCore
         /// <param name="input"></param>
         private void ProcessGuess(string input)
         {
-            string password = GameSettings.Instance.passwordCode;
+            string password = GameSettings.Instance.password;
             int well = GetWellPlacedCount(input);
             int mis = GetMisPlacedCount(input);
 
-            MassagePro.TextPro($"Round: {m_round}", threadSleep: 5);
-            MassagePro.TextPro($"Well placed pieces : {well}", threadSleep: 5);
-            MassagePro.TextPro($"Misplaced pieces  : {mis}", threadSleep: 5);
-            MassagePro.TextPro("=========================");
+            MassagePro.Text($"Round: {m_round}", threadSleep: 5);
+            MassagePro.Text($"Well placed pieces : {well}", threadSleep: 5);
+            MassagePro.Text($"Misplaced pieces  : {mis}", threadSleep: 5);
+            MassagePro.Text("=========================");
 
             if (well == password.Length)
             {
-                MassagePro.TextPro("🎉 You won! Password is correct.", ConsoleColor.Green, 30);
+                MassagePro.Text("You won! Password is correct.", ConsoleColor.Green, 30);
                 m_isGameOver = true;
                 return;
             }
@@ -127,7 +125,7 @@ namespace MasterMind.GameCore
 
             if (m_round > GameSettings.Instance.attempts)
             {
-                MassagePro.TextPro($"💥 Game over. The correct password was: {password}", ConsoleColor.Red, 30);
+                MassagePro.Text($"Game over. The correct password was: {password}", ConsoleColor.Red, 30);
                 m_isGameOver = true;
             }
         }
@@ -140,7 +138,7 @@ namespace MasterMind.GameCore
         private int GetWellPlacedCount(string input)
         {
             int count = 0;
-            string password = GameSettings.Instance.passwordCode;
+            string password = GameSettings.Instance.password;
 
             for (int i = 0; i < input.Length; i++)
             {
@@ -161,7 +159,7 @@ namespace MasterMind.GameCore
         private int GetMisPlacedCount(string input)
         {
             int count = 0;
-            string password = GameSettings.Instance.passwordCode;
+            string password = GameSettings.Instance.password;
 
             for (int i = 0; i < input.Length; i++)
             {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 namespace MasterMind.GameCore
@@ -11,8 +9,7 @@ namespace MasterMind.GameCore
     /// </summary>
     internal class GameSettings
     {
-        public string playerName { get; set; } = "Player";
-        public string passwordCode { get; private set; } = "";
+        public string password { get; private set; } = "";
         public int attempts { get; private set; } = 8;
 
         private static GameSettings m_instance;
@@ -32,23 +29,6 @@ namespace MasterMind.GameCore
             }
         }
 
-        /// <summary>
-        /// Updates the player name by:
-        /// - Trimming leading and trailing whitespace
-        /// - Converting the name to title case
-        /// </summary>
-        /// <param name="newPlayerName"></param>
-        public void ChangePlayerName(string newPlayerName)
-        {
-            TextInfo textinfo = CultureInfo.CurrentCulture.TextInfo;
-
-            //Filtering :
-            newPlayerName = textinfo.ToTitleCase(newPlayerName);
-            newPlayerName = newPlayerName.Trim();
-
-            playerName = newPlayerName;
-        }
-
         /// Updates the password by:
         /// - Trimming leading and trailing whitespace
         /// <param name="newPassword"></param>
@@ -58,10 +38,12 @@ namespace MasterMind.GameCore
 
             if(inputValidator.IsNumericOnly(newPassword) && inputValidator.IsCorrectLenght(newPassword,4) && inputValidator.HasUniqueDigits(newPassword))
             {
-                passwordCode = newPassword;
+                password = newPassword;
+                MassagePro.Text("The password has been changed successfully.", ConsoleColor.Green, 5);
             }
             else
             {
+                MassagePro.Text("An error occurred you cannot change the password.", ConsoleColor.Red, 5);
                 return;
             }
         }
@@ -84,7 +66,7 @@ namespace MasterMind.GameCore
                 }
             }
 
-            passwordCode = newPassword;
+            ChangePassword(newPassword);
         }
 
         /// Updates the number of attempts by:
@@ -101,6 +83,7 @@ namespace MasterMind.GameCore
             }
             else
             {
+                MassagePro.Text($"You can only enter numbers.", ConsoleColor.Red, 5);
                 return;
             }
 
@@ -110,6 +93,8 @@ namespace MasterMind.GameCore
             }
 
             attempts = intAttempts;
+            MassagePro.Text($"The number of attempts has been changed to {attempts} attempts",ConsoleColor.Green,5);
         }
     }
+
 }
