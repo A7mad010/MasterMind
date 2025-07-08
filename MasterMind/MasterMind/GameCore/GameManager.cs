@@ -44,6 +44,7 @@ namespace MasterMind.GameCore
 
             if (!IsValidGuess(input))
             {
+                MassagePro.Text("There is a typographical error; it should contain only four non-repeating digits.", ConsoleColor.Red, 5);
                 return;
             }
 
@@ -55,7 +56,7 @@ namespace MasterMind.GameCore
         /// </summary>
         public void ReStartGame()
         {
-            GameSettings.Instance.ChangePassword("");
+            GameSettings.Instance.RandomPassword();
             m_isGameOver = false;
             m_isGameStarted = false;
             m_round = 1;
