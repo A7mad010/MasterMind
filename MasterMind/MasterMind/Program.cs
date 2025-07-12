@@ -14,6 +14,13 @@ namespace MasterMind
 
         static void Main(string[] args)
         {
+
+            if (args.Length > 0)
+            {
+                string commandLineInput = string.Join(" ", args);
+                IsInputCommand(commandLineInput);
+            }
+
             MassagePro.Text("'MasterMind Game'", ConsoleColor.Yellow , 5);
             MassagePro.Text("Welcome to MasterMind Game", ConsoleColor.White, 5);
             MassagePro.Text("Enter (-start) To Start Game or (-help) to see all options", ConsoleColor.White, 5);
@@ -28,7 +35,7 @@ namespace MasterMind
         {
             input = input.Trim();
 
-            if(input.StartsWith("-"))
+            if(input.StartsWith("-") && gameManager.IsGameStart() == false)
             {
                 commads.Write(input);
             }

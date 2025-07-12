@@ -58,7 +58,7 @@ namespace MasterMind.GameCore
 
             while (newPassword.Length < 4)
             {
-                char digit = random.Next(0, 10).ToString()[0];
+                char digit = random.Next(0, 9).ToString()[0];
 
                 if (!newPassword.Contains(digit))
                 {

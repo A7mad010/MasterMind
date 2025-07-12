@@ -16,6 +16,12 @@ namespace MasterMind.GameCore
 
         private static GameManager m_instance;
 
+        /// <summary>
+        /// Check if the game is running.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsGameStart() => m_isGameStarted == true;
+
         //singelton
         public static GameManager Instance
         {
@@ -44,7 +50,7 @@ namespace MasterMind.GameCore
 
             if (!IsValidGuess(input))
             {
-                MassagePro.Text("There is a typographical error; it should contain only four non-repeating digits.", ConsoleColor.Red, 5);
+                MassagePro.Text("There is a typographical error, it should contain only four non-repeating digits.", ConsoleColor.Red, 5);
                 return;
             }
 
@@ -66,7 +72,7 @@ namespace MasterMind.GameCore
 
         /// <summary>
         /// Handles the initial game start input from the user.
-        /// Starts the game if the user inputs 'yes',
+        /// Starts the game if the user inputs '-start',
         /// otherwise prompts the user to confirm if they are ready.
         /// </summary>
         /// <param name="input"></param>
@@ -80,11 +86,11 @@ namespace MasterMind.GameCore
                 }
 
                 m_isGameStarted = true;
-                MassagePro.Text("Game started! Try to guess the password.", ConsoleColor.Green, 5);
+                MassagePro.Text("Game started! Try to guess the password", ConsoleColor.Green, 5);
             }
             else
             {
-                MassagePro.Text("The game is currently being played.", ConsoleColor.Green, 5);
+                MassagePro.Text("The game is currently being played", ConsoleColor.Green, 5);
             }
         }
 
@@ -117,7 +123,7 @@ namespace MasterMind.GameCore
 
             if (well == password.Length)
             {
-                MassagePro.Text("You won! Password is correct.", ConsoleColor.Green, 30);
+                MassagePro.Text("You won! Password is correct", ConsoleColor.Green, 30);
                 m_isGameOver = true;
                 return;
             }
@@ -126,7 +132,7 @@ namespace MasterMind.GameCore
 
             if (m_round > GameSettings.Instance.attempts)
             {
-                MassagePro.Text($"Game over. The correct password was: {password}", ConsoleColor.Red, 30);
+                MassagePro.Text($"Game over, The correct password was: {password}", ConsoleColor.Red, 30);
                 m_isGameOver = true;
             }
         }
